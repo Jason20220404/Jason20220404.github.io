@@ -1,182 +1,898 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-L7W4M32MGD"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zhe-Yuan Zhang — Notes on Emergence</title>
+<meta name="description" content="Biophysics, cell mechanics, watercolor, and the physics of emergence. A slow record of what I'm reading, making, and thinking through.">
 
-  gtag('config', 'G-L7W4M32MGD');
-</script>
-    <link rel="apple-touch-icon" href="forest-favicon.png"> <!-- iOS -->
-    <link rel="icon" type="image/svg+xml" href="forest-favicon.svg">
+<!--
+  ================================================================
+  HOW TO USE THIS SITE · 使用說明
+  ================================================================
 
-    
+  This is a single HTML file. Everything — content, styles,
+  structure — lives here. To update the site, edit this file.
+  No database, no build step, no CMS. Just text.
 
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Forest</title>
-    <link rel="stylesheet" href="stylenew.css">
+  這是一個單一的 HTML 檔案。所有東西都在這裡。更新網站就是
+  編輯這個檔案。沒有資料庫,沒有後台,沒有編譯步驟,只有文字。
+
+  ----------------------------------------------------------------
+  TO ADD A NEW WRITING ENTRY · 新增一篇文章
+  ----------------------------------------------------------------
+  1. Find the section marked  WRITING ENTRIES  below (search for it)
+  2. Copy one of the existing <details class="entry">...</details>
+     blocks. They're designed to be copy-pasted.
+  3. Change the date, title, excerpt, and body.
+  4. Save. Refresh the browser. Done.
+
+  ----------------------------------------------------------------
+  TO PREVIEW LOCALLY · 本地預覽
+  ----------------------------------------------------------------
+  Just double-click this file. It opens in your browser.
+  No server needed.
+
+  ----------------------------------------------------------------
+  TO DEPLOY · 部署上線
+  ----------------------------------------------------------------
+  · GitHub Pages (recommended): create a public repo, push this
+    as index.html, enable Pages in repo settings. Free forever.
+  · Netlify Drop: drag this file onto netlify.com/drop. 10 seconds.
+  · Firebase Hosting: you already know this one.
+
+  ----------------------------------------------------------------
+  THE RULE · 規則
+  ----------------------------------------------------------------
+  One entry per month is enough. Write it even when it feels small.
+  A thought written imperfectly beats a thought never written.
+  一個月一篇就夠了。即使覺得微不足道也要寫下來。
+  不完美的想法,勝過沒寫下來的想法。
+  ================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     DESIGN TOKENS
+     ============================================================ */
+  :root {
+    --ink:     #1a1a1a;
+    --muted:   #6b6b6b;
+    --soft:    #8a8580;
+    --accent:  #1f4e5f;
+    --rule:    #d8d2c7;
+    --paper:   #faf9f5;
+    --warm:    #f3efe6;
+
+    --serif:   Palatino, "Palatino Linotype", "Book Antiqua",
+               "Noto Serif TC", "Songti TC", Georgia, serif;
+    --display: "Poppins", -apple-system, BlinkMacSystemFont,
+               "Helvetica Neue", Arial, sans-serif;
+
+    --measure: 660px;
+  }
+
+  /* ============================================================
+     RESET & BASE
+     ============================================================ */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+  }
+
+  body {
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.72;
+    color: var(--ink);
+    background: var(--paper);
+    font-feature-settings: "onum" 1, "liga" 1, "kern" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* ============================================================
+     LAYOUT
+     ============================================================ */
+  .wrap {
+    max-width: var(--measure);
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ============================================================
+     NAVIGATION
+     ============================================================ */
+  nav.top {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(250, 249, 245, 0.88);
+    -webkit-backdrop-filter: saturate(180%) blur(10px);
+            backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  nav.top .wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  nav.top .mark {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  nav.top ul {
+    list-style: none;
+    display: flex;
+    gap: 28px;
+  }
+
+  nav.top a {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 11.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  nav.top a:hover,
+  nav.top a:focus-visible {
+    color: var(--accent);
+  }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  header.hero {
+    padding: 104px 0 72px;
+  }
+
+  header.hero .eyebrow {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  header.hero h1 {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 38px;
+    line-height: 1.15;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+
+  header.hero .lede {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--soft);
+    max-width: 540px;
+  }
+
+  /* ============================================================
+     SECTIONS
+     ============================================================ */
+  section {
+    padding: 80px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .section-label {
+    display: block;
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 10.5px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  h2.section-title {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 30px;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    margin-bottom: 40px;
+    max-width: 560px;
+  }
+
+  /* ============================================================
+     PROSE
+     ============================================================ */
+  .prose p {
+    margin-bottom: 22px;
+    font-size: 18px;
+    line-height: 1.76;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .prose em { font-style: italic; }
+
+  .prose strong {
+    font-weight: normal;
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .prose a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    transition: border-color 200ms ease;
+  }
+  .prose a:hover { border-bottom-color: var(--accent); }
+
+  .prose h3 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 44px 0 14px;
+  }
+
+  .prose blockquote {
+    margin: 28px 0;
+    padding-left: 24px;
+    border-left: 2px solid var(--rule);
+    font-style: italic;
+    color: var(--soft);
+  }
+
+  /* ============================================================
+     FIGURE PLACEHOLDER
+     ============================================================ */
+  .figure {
+    margin: 36px 0;
+    padding: 0;
+    background: var(--warm);
+    border: 1px solid var(--rule);
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--soft);
+    font-family: var(--display);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ============================================================
+     WRITING ENTRIES
+     ============================================================ */
+  .entry {
+    padding: 30px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .entry:last-child { border-bottom: none; }
+
+  .entry > summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 0;
+    transition: opacity 200ms ease;
+  }
+  .entry > summary:hover { opacity: 0.72; }
+  .entry > summary::-webkit-details-marker { display: none; }
+  .entry > summary::marker { display: none; }
+
+  .entry-meta {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .entry-title {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: normal;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 10px;
+    letter-spacing: 0.005em;
+  }
+
+  .entry-excerpt {
+    font-style: italic;
+    font-size: 16.5px;
+    color: var(--soft);
+    line-height: 1.6;
+  }
+
+  .entry[open] .entry-excerpt { display: none; }
+
+  .entry-body {
+    padding-top: 26px;
+    animation: unfold 400ms ease-out;
+  }
+
+  @keyframes unfold {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============================================================
+     PROJECTS
+     ============================================================ */
+  .project {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .project:last-child { border-bottom: none; }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .project-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--ink);
+  }
+
+  .project-tag {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .project-question {
+    font-style: italic;
+    color: var(--soft);
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .project-body {
+    font-size: 16.5px;
+    line-height: 1.68;
+    color: var(--ink);
+  }
+
+  .project-links {
+    margin-top: 14px;
+    font-family: var(--display);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+
+  .project-links a {
+    color: var(--accent);
+    text-decoration: none;
+    margin-right: 22px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+    transition: border-color 200ms ease;
+  }
+  .project-links a:hover { border-bottom-color: var(--accent); }
+
+  /* ============================================================
+     COLOPHON / FOOTER
+     ============================================================ */
+  footer {
+    padding: 72px 0 96px;
+    border-top: 1px solid var(--rule);
+    text-align: center;
+  }
+
+  footer .colophon {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  footer .contact {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--soft);
+  }
+
+  footer a {
+    color: var(--soft);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+  }
+  footer a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 640px) {
+    body { font-size: 17px; }
+    .wrap { padding: 0 22px; }
+
+    header.hero { padding: 72px 0 56px; }
+    header.hero h1 { font-size: 26px; letter-spacing: 0.1em; }
+    header.hero .lede { font-size: 17px; }
+
+    section { padding: 60px 0; }
+    h2.section-title { font-size: 24px; margin-bottom: 30px; }
+
+    .entry-title { font-size: 21px; }
+
+    nav.top .wrap { padding: 14px 22px; }
+    nav.top .mark { display: none; }
+    nav.top ul { gap: 22px; width: 100%; justify-content: space-between; }
+  }
+</style>
 </head>
+
 <body>
-    <header>
-        <div class="language-switch">
-            <button onclick="toggleLanguage('zh')">中文</button>
-            <button onclick="toggleLanguage('en')">EN</button>
+
+<!-- =============================================================
+     NAVIGATION
+     ============================================================= -->
+<nav class="top">
+  <div class="wrap">
+    <a class="mark" href="#top">ZY · NOTES</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#writing">Writing</a></li>
+      <li><a href="#projects">Projects</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- =============================================================
+     HERO
+     ============================================================= -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="eyebrow">Biophysics · Cell Mechanics · Notes</div>
+    <h1>Zhe&thinsp;&ndash;&thinsp;Yuan&nbsp;&nbsp;Zhang</h1>
+    <p class="lede">
+      A slow record of what I'm reading, making, and working through.
+      The through-line is <em>emergence</em> — how simple local rules
+      give rise to collective structure.
+    </p>
+  </div>
+</header>
+
+<!-- =============================================================
+     ABOUT
+     ============================================================= -->
+<section id="about">
+  <div class="wrap">
+    <span class="section-label">About</span>
+    <h2 class="section-title">What I'm doing, and why.</h2>
+
+    <div class="prose">
+      <p>
+        I'm a second-year master's student in Applied Physics at
+        National Taiwan University, working in biophysics at Academia
+        Sinica under Prof. Lin Keng-Hui and co-advised by Prof. Lin
+        Li-Chyong. My research is on how epithelial cells sense the
+        curvature of the surface they live on — but the deeper
+        question, the one I keep returning to, is about
+        <em>emergence</em>: how simple local rules give rise to
+        collective structure.
+      </p>
+
+      <p>
+        That question follows me around. It's why I find myself
+        reading biophysics, complex systems theory, and Douglas
+        Hofstadter in the same evening. It's why I paint watercolors
+        in the afternoons — a brush touches wet paper and the pigment
+        organizes itself in ways no one planned. It's why I spent a
+        summer teaching myself computer vision to track a tennis ball
+        through the air. The specifics change; the question doesn't.
+      </p>
+
+      <p>
+        This site is a place to think in public. I'm using it as a
+        slow, honest record of what I'm reading, making, and working
+        through — research notes, essays, projects that never quite
+        finish. The goal isn't a portfolio. It's a practice: showing
+        up and writing down what I actually think, not what I believe
+        I should think.
+      </p>
+
+      <p>
+        If any of that resonates, you're welcome here. Most of what
+        you'll find below is unfinished on purpose.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================================
+     RESEARCH
+     ============================================================= -->
+<section id="research">
+  <div class="wrap">
+    <span class="section-label">Research</span>
+    <h2 class="section-title">
+      How do cells decide which way is "down" on a curved surface?
+    </h2>
+
+    <div class="prose">
+      <p>
+        Most of cell biology happens on flat glass. A petri dish is a
+        reasonable approximation of flat, and a cell grown on flat
+        glass is well-behaved and easy to image. But real tissues are
+        not flat. The inside of your gut is corrugated; the surface
+        of a developing embryo is a landscape of hills and valleys;
+        a blood vessel is a cylinder. Cells live on curved surfaces,
+        and there is good reason to think they notice.
+      </p>
+
+      <p>
+        My research, done in Prof. [Advisor]'s lab at Academia Sinica
+        with Prof. Lin Li-Chyong as co-advisor, asks what epithelial
+        cells do when you put them on a surface whose curvature you
+        can change. We use a pneumatically actuated PDMS microdome —
+        a thin elastic membrane that we inflate or deflate to switch
+        between flat, convex (dome-out), and concave (dome-in)
+        geometries, all while the same cells sit on top.
+      </p>
+
+      <div class="figure">Figure · Microdome device (to add)</div>
+
+      <h3>The surprising part</h3>
+
+      <p>
+        The textbook prediction for <em>curvotaxis</em> — directed
+        migration driven by curvature — is that cells prefer concave
+        regions. The reasoning is geometric: on a concave surface, a
+        cell's neighbors are slightly closer than they would be on a
+        flat one, which makes adhesion energetically favorable. This
+        has been observed for single cells in multiple systems.
+      </p>
+
+      <p>
+        We see something else. When we grow a confluent MDCK
+        monolayer on a convex dome, the cells migrate <em>toward</em>
+        the top of the dome — centripetally, inward, against the
+        textbook prediction. The effect is robust and reproducible.
+        It tells us that collective migration on curved substrates
+        isn't just single-cell curvotaxis summed up. Something about
+        being part of a sheet changes what the cells do.
+      </p>
+
+      <h3>The hard part</h3>
+
+      <p>
+        The hard part is that curvature never comes alone. When you
+        deform a PDMS membrane into a dome, you also strain it — and
+        cells have a separate, well-known response to strain called
+        <em>tensotaxis</em>. So when we see centripetal migration on
+        a dome, we don't immediately know whether the cells are
+        responding to the curvature, the strain, or some combination
+        of the two. Disentangling these is most of what I'm doing
+        right now: designing paired controls (same curvature,
+        different strain; same strain, different curvature) and
+        building the analysis tools to measure each independently.
+      </p>
+
+      <h3>Tools I've built along the way</h3>
+
+      <p>
+        One tool that turned out to matter is a
+        <em>Lambert equal-area projection</em> correction for 2D
+        velocity and strain fields measured on curved 3D substrates.
+        When you image a dome from above, pixels far from the apex
+        represent smaller physical areas than pixels near the apex —
+        the projection distorts the measurement. The Lambert
+        projection is the cartographer's trick for unfolding a sphere
+        onto a plane while preserving area, and it turns out to be
+        exactly what you want for unbiased PIV on a curved sample.
+        It's not glamorous, but getting the coordinates right is
+        most of getting the answer right.
+      </p>
+
+      <p>
+        Alongside that, I've built the group's Python pipeline for
+        3D particle tracking (for membrane characterization), 2D PIV
+        on projected images (for collective migration), and bulge-
+        test fitting (for mechanical calibration of the PDMS). A lot
+        of graduate research is just: read the image correctly, then
+        ask it the right question.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================================
+     WRITING ENTRIES
+     ============================================================= -->
+<section id="writing">
+  <div class="wrap">
+    <span class="section-label">Writing</span>
+    <h2 class="section-title">Notes, half-formed thoughts, and things I want to remember.</h2>
+
+    <div class="entries">
+
+      <!-- ========== ENTRY TEMPLATE START ========== -->
+      <details class="entry" open>
+        <summary>
+          <div class="entry-meta">Essay · March 2026</div>
+          <h3 class="entry-title">When the cells go the wrong way</h3>
+          <p class="entry-excerpt">
+            On what it feels like to find a result that contradicts
+            what you expected to find — and why I'm learning to trust
+            it before I can explain it.
+          </p>
+        </summary>
+        <div class="entry-body prose">
+          <p>
+            The first time I saw the velocity field pointing inward
+            on a convex dome, I assumed I had a bug. I spent two
+            weeks looking for it. I re-ran the PIV with different
+            parameters, re-ran the Lambert projection in case I had
+            flipped a sign, swapped test datasets, asked a friend to
+            look at my code. Everything checked out. The cells really
+            were migrating toward the top of the dome, and the
+            textbook said they shouldn't be.
+          </p>
+
+          <p>
+            I want to write down what that felt like, because I think
+            it matters. It didn't feel triumphant. It felt slightly
+            embarrassing — as if I had been caught disagreeing with a
+            textbook on a subject I was clearly less qualified on
+            than the textbook. My first instinct was not
+            <em>I've found something</em>, it was <em>I've made a
+            mistake I haven't located yet</em>.
+          </p>
+
+          <p>
+            A few days later, reading Sadhu et al. (2024), I came
+            across a line in their discussion that said, in effect:
+            collective migration on curved substrates may not reduce
+            to single-cell curvotaxis, because the mechanics of a
+            sheet are different from the mechanics of its parts. And
+            I felt the lock click.
+          </p>
+
+          <p>
+            The thing I want to remember is the gap between the
+            observation and the <em>permission</em> to trust the
+            observation. For two weeks I had real data telling me
+            something interesting, and I refused to look at it as
+            data — I looked at it as bugs-in-disguise. The permission
+            to trust it came from outside, from a paper that said
+            something adjacent enough that I could borrow its
+            confidence. I wonder how many findings get filed under
+            "bug I couldn't find" because nobody ever hands the
+            researcher that borrowed permission.
+          </p>
+
+          <p>
+            This is a note to future me, when I'm more senior and
+            someone less senior brings me a weird result: the default
+            response should be <em>tell me more</em>, not
+            <em>check your code</em>. Both can be true at once, but
+            the order matters. Check-your-code first kills things
+            that should have lived.
+          </p>
         </div>
-        <h1>
-            <span class="zh">Jason's Forest</span>
-            <span class="en" style="display: none;">Forest of Creativity Quantum</span>
-        </h1>
-        <p>
-            <span class="zh">在這片創意森林中探索無限蘑菇</span>
-            <span class="en" style="display: none;">Explore Endless Possibilities in This Creative Forest Quantum</span>
-        </p>
-    </header>
+      </details>
+      <!-- ========== ENTRY TEMPLATE END ========== -->
 
-    <nav>
-        <ul>
-            <li>
-                <a href="#portfolio">
-                    <span class="zh">作品集</span>
-                    <span class="en" style="display: none;">Portfolio</span>
-                </a>
-            </li>
-            <li>
-                <a href="#blog">
-                    <span class="zh">部落格</span>
-                    <span class="en" style="display: none;">Blog</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+      <!-- A stub — delete or fill in -->
+      <details class="entry">
+        <summary>
+          <div class="entry-meta">Reading Notes · [Month] 2026</div>
+          <h3 class="entry-title">[Title of your next note]</h3>
+          <p class="entry-excerpt">
+            [One or two sentences that tell the reader what this is
+            about and why they should click to read more.]
+          </p>
+        </summary>
+        <div class="entry-body prose">
+          <p>[Your writing goes here. Delete this entry or replace
+          the content with a real note.]</p>
+        </div>
+      </details>
 
-    <main class="container">
-        <section id="portfolio">
-            <h2 class="section-title">
-                <span class="zh">作品集</span>
-                <span class="en" style="display: none;">Creative Footprints</span>
-            </h2>
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <a href="about.html">
-                        <img src="cape jasmine 2.png" alt="cape jasmine">
-                    </a>
-                    <div class="portfolio-item-content">
-                        <h3>
-                            <span class="zh">森林中的梔子花</span>
-                            <span class="en" style="display: none;">Cape jasmine of the Forest</span>
-                        </h3>
-                        <p>
-                            <span class="zh">一個充滿自然靈感的花...</span>
-                            <span class="en" style="display: none;">A nature-inspired flower</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <a href="manga.html"> 
-                        <img src="turtle2.png" alt="turtle2">
-                    </a>
-                    <div class="portfolio-item-content">
-                        <h3>
-                            <span class="zh">光影之舞</span>
-                            <span class="en" style="display: none;">Dance of Light and Shadow</span>
-                        </h3>
-                        <p>
-                            <span class="zh">探索光與影的奧妙互動...</span>
-                            <span class="en" style="display: none;">Exploring the magical interaction of light and shadow...</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <img src="turtle2.png" alt="turtle2">
-                    <div class="portfolio-item-content">
-                        <h3>
-                            <span class="zh">光影之舞</span>
-                            <span class="en" style="display: none;">Dance of Light and Shadow</span>
-                        </h3>
-                        <p>
-                            <span class="zh">探索光與影的奧妙互動...</span>
-                            <span class="en" style="display: none;">Exploring the magical interaction of light and shadow...</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <!-- Another stub -->
+      <details class="entry">
+        <summary>
+          <div class="entry-meta">Note · [Month] 2026</div>
+          <h3 class="entry-title">[A smaller observation]</h3>
+          <p class="entry-excerpt">
+            [Short notes are allowed. A paragraph is a paragraph.
+            The point is to write, not to publish.]
+          </p>
+        </summary>
+        <div class="entry-body prose">
+          <p>[Shorter entries are fine. A single paragraph counts.]</p>
+        </div>
+      </details>
 
-        <section id="blog">
-            <h2 class="section-title">
-                <span class="zh">部落格</span>
-                <span class="en" style="display: none;">Thought Journal</span>
-            </h2>
-            <div class="blog-posts">
-                <article class="blog-post">
-                    <img src="cape jasmine 2.png" alt="cape jasmine">
-                    <h3>
-                        <span class="zh">關於智商；我的想法</span>
-                        <span class="en" style="display: none;">Walking the Creative Path</span>
-                    </h3>
-                    <p>
-                        <span class="zh">［初稿］在談論聰明與否前我們應該有所保留，否則真的會變成「笨蛋」。---</span>
-                        <span class="en" style="display: none;">Sharing moments of inspiration and deep insights during my creative journey...</span>
-                    </p>
-                </article>
-                <article class="blog-post">
-                    <h3>
-                        <span class="zh">自然的創意靈感</span>
-                        <span class="en" style="display: none;">Nature's Creative Inspiration</span>
-                    </h3>
-                    <p>
-                        <span class="zh">從大自然汲取創作養分，讓靈感在心中生根發芽...</span>
-                        <span class="en" style="display: none;">Drawing creative nourishment from nature, letting inspiration take root and grow...</span>
-                    </p>
-                </article>
-                <article class="blog-post">
-                    <h3>
-                        <span class="zh">自然的創意靈感</span>
-                        <span class="en" style="display: none;">Nature's Creative Inspiration</span>
-                    </h3>
-                    <p>
-                        <span class="zh">從大自然汲取創作養分，讓靈感在心中生根發芽...</span>
-                        <span class="en" style="display: none;">Drawing creative nourishment from nature, letting inspiration take root and grow...</span>
-                    </p>
-                </article>                <article class="blog-post">
-                    <h3>
-                        <span class="zh">自然的創意靈感</span>
-                        <span class="en" style="display: none;">Nature's Creative Inspiration</span>
-                    </h3>
-                    <p>
-                        <span class="zh">從大自然汲取創作養分，讓靈感在心中生根發芽...</span>
-                        <span class="en" style="display: none;">Drawing creative nourishment from nature, letting inspiration take root and grow...</span>
-                    </p>
-                </article>
-            </div>
-        </section>
-    </main>
+    </div>
+  </div>
+</section>
 
-    <footer>
-        <p>
-            <span class="zh">© 2024 jason. 版權所有 | 聯絡信箱：example@email.com</span>
-            <span class="en" style="display: none;">© 2024 Forest of Creativity. Let creativity flourish endlessly.</span>
-        </p>
-    </footer>
+<!-- =============================================================
+     PROJECTS
+     ============================================================= -->
+<section id="projects">
+  <div class="wrap">
+    <span class="section-label">Projects</span>
+    <h2 class="section-title">Things I've made, mostly to understand something.</h2>
 
-    <script>
-        function toggleLanguage(lang) {
-            const zhElements = document.querySelectorAll('.zh');
-            const enElements = document.querySelectorAll('.en');
-            
-            if (lang === 'zh') {
-                zhElements.forEach(el => el.style.display = 'inline');
-                enElements.forEach(el => el.style.display = 'none');
-            } else {
-                zhElements.forEach(el => el.style.display = 'none');
-                enElements.forEach(el => el.style.display = 'inline');
-            }
-        }
-    </script>
+    <div class="projects">
+
+      <div class="project">
+        <div class="project-header">
+          <div class="project-title">Cell Migration Analysis Toolkit</div>
+          <div class="project-tag">Python · 2024 – present</div>
+        </div>
+        <div class="project-question">
+          How do you measure motion and strain on a surface that
+          isn't flat without lying to yourself?
+        </div>
+        <div class="project-body">
+          Python tooling I've built for the lab: PIV on projected
+          images, multi-region CSV analysis, velocity-vector
+          visualization, and a Lambert equal-area projection
+          correction so that measurements on curved PDMS membranes
+          aren't distorted by the projection from 3D to 2D. Built
+          incrementally, as each real experiment exposed a new thing
+          the pipeline needed to do.
+        </div>
+        <div class="project-links">
+          <a href="#">GitHub</a>
+          <a href="#">Method note</a>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-header">
+          <div class="project-title">FractalFocus</div>
+          <div class="project-tag">Progressive Web App · 2023</div>
+        </div>
+        <div class="project-question">
+          Can recursive self-similar structure help a person think
+          about a task the way a fractal thinks about a coastline?
+        </div>
+        <div class="project-body">
+          A small PWA exploring recursive task decomposition: any
+          goal can be broken into sub-goals, which can be broken
+          again, until you arrive at something you can actually do
+          now. Really a design sketch about how structure at one
+          scale relates to structure at another — a cognitive toy
+          for the emergence question, wearing the disguise of a
+          to-do app.
+        </div>
+        <div class="project-links">
+          <a href="#">Live demo</a>
+          <a href="#">GitHub</a>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-header">
+          <div class="project-title">Tennis Stroke &amp; Ball-Trajectory Analysis</div>
+          <div class="project-tag">Computer Vision · 2023</div>
+        </div>
+        <div class="project-question">
+          How much of a complex physical skill can you reconstruct
+          from a phone video?
+        </div>
+        <div class="project-body">
+          A pipeline combining OpenCV, YOLO, and MediaPipe for pose
+          estimation and ball tracking from consumer smartphone
+          video of tennis rallies. It taught me, uncomfortably, how
+          much of my own forehand I had been imagining rather than
+          measuring.
+        </div>
+        <div class="project-links">
+          <a href="#">Write-up</a>
+          <a href="#">GitHub</a>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-header">
+          <div class="project-title">Watercolors</div>
+          <div class="project-tag">Ongoing · since forever</div>
+        </div>
+        <div class="project-question">
+          What does it feel like to let a physical system do half
+          your work for you, and then try to meet it halfway?
+        </div>
+        <div class="project-body">
+          I paint watercolors in the afternoons. Watercolor is a
+          medium where the painter places the edges and the water
+          does the interior — pigment self-organizes through
+          diffusion, capillary action, and the irregularity of paper
+          fibers. It is, not accidentally, the same kind of
+          emergence question my day job asks.
+        </div>
+        <div class="project-links">
+          <a href="#">Selected pieces</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =============================================================
+     FOOTER
+     ============================================================= -->
+<footer>
+  <div class="wrap">
+    <div class="colophon">
+      Handset in Palatino &amp; Poppins · Built to last
+    </div>
+    <div class="contact">
+      <a href="mailto:r13245019@ntu.edu.tw">r13245019@ntu.edu.tw</a>
+      &nbsp;·&nbsp;
+      <a href="https://github.com/Jason20220404">GitHub</a>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
